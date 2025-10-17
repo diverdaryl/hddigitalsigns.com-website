@@ -5,163 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HD Digital Signs Corporation</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Helvetica Neue", Arial, sans-serif;
-    }
-
-    body {
-      scroll-behavior: smooth;
-      background-color: #f5f7fa;
-    }
-
+    * {margin: 0; padding: 0; box-sizing: border-box; font-family: "Helvetica Neue", Arial, sans-serif;}
+    body {scroll-behavior: smooth; background-color: #f5f7fa;}
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 80px;
-      background-color: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 80px; background-color: rgba(255,255,255,0.95);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
     }
-
-    header img {
-      height: 100px;
-      width: auto;
-    }
-
+    header img {height: 100px; width: auto;}
     header nav a {
-      color: #004aad;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin-left: 25px;
+      color: #004aad; text-decoration: none; font-weight: bold;
+      font-size: 1.1em; margin-left: 25px;
     }
-
-    header nav a:hover {
-      color: #007bff;
-    }
-
+    header nav a:hover {color: #007bff;}
     section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-      background-size: cover;
-      background-position: center;
-      position: relative;
+      height: 100vh; display: flex; align-items: center;
+      justify-content: center; text-align: center;
+      color: white; background-size: cover;
+      background-position: center; position: relative;
     }
-
     section::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 50, 100, 0.45);
-      z-index: 1;
+      content: ""; position: absolute; top: 0; left: 0; width: 100%;
+      height: 100%; background: rgba(0,50,100,0.45); z-index: 1;
     }
-
-    .content {
-      position: relative;
-      z-index: 2;
-      padding: 20px;
-      max-width: 800px;
-    }
-
+    .content {position: relative; z-index: 2; padding: 20px; max-width: 800px;}
     .content h1 {
-      font-size: 3em;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      color: #fff;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+      font-size: 3em; margin-bottom: 15px; text-transform: uppercase;
+      color: #fff; text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
     }
+    .content p {font-size: 1.2em; line-height: 1.6; color: #e8eef9;}
+    footer {background: #002b5c; color: white; padding: 25px; text-align: center;}
+    footer p {margin: 5px 0; font-size: 0.9em;}
 
-    .content p {
-      font-size: 1.2em;
-      line-height: 1.6;
-      color: #e8eef9;
+    /* INVENTORIES SECTION */
+    #inventories {
+      background-color: #ffffff; padding: 100px 20px;
+      margin-top: 120px; text-align: center;
+      border-top: 5px solid #004aad; color: #003366;
+      position: relative; z-index: 3; height: auto;
     }
-
-    footer {
-      background: #002b5c;
-      color: white;
-      padding: 25px;
-      text-align: center;
+    .inventory-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px; justify-items: center; margin-top: 40px;
     }
-
-    footer p {
-      margin: 5px 0;
-      font-size: 0.9em;
+    .zoomable {
+      width: 100%; max-width: 500px; border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer; transition: transform 0.2s ease;
     }
-
-    /* Clients Section */
-    #clients {
-      background-color: #ffffff;
-      color: #004aad;
-      flex-direction: column;
-      height: auto;
-      padding: 100px 20px;
+    .zoomable:hover {transform: scale(1.03);}
+    
+    /* MODAL */
+    #imageModal {
+      display: none; position: fixed; z-index: 2000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95); justify-content: center;
+      align-items: center; flex-direction: column;
+      opacity: 0; transition: opacity 0.3s ease;
     }
-
-    #clients::before {
-      display: none;
+    #imageModal.show {display: flex; opacity: 1;}
+    .modal-content {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      max-height: 90vh; overflow: hidden;
     }
-
-    .clients-content h1 {
-      color: #004aad;
-      font-size: 2.5em;
-      margin-bottom: 40px;
+    #modalImage {
+      max-width: 90vw; max-height: 85vh; border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      transition: opacity 0.3s ease;
     }
-
-    .client-logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 50px;
+    #closeModal {
+      position: fixed; top: 20px; right: 40px; color: white;
+      font-size: 2em; cursor: pointer; font-weight: bold;
+      z-index: 2100;
     }
-
-    .client-logos img {
-      height: 100px;
-      width: auto;
-      transition: transform 0.3s ease;
-      filter: grayscale(100%);
+    .arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      color: white; font-size: 3em; cursor: pointer;
+      padding: 15px; z-index: 2100; user-select: none;
+      transition: color 0.2s;
     }
-
-    .client-logos img:hover {
-      transform: scale(1.1);
-      filter: grayscale(0%);
-    }
+    .arrow:hover {color: #007bff;}
+    #prevArrow {left: 30px;}
+    #nextArrow {right: 30px;}
   </style>
-
-/* Fix contact link colors on mobile */
-#contact a {
-  color: white !important;
-  text-decoration: none !important;
-  -webkit-text-fill-color: white !important; /* For Safari/iOS */
-}
-
-#contact a:hover {
-  color: #ffd700 !important; /* optional hover color */
-}
-
 </head>
 <body>
 
 <header>
-  <div>
-    <img src="Logo.png" alt="HD Digital Signs Logo" />
-  </div>
+  <div><img src="Logo.png" alt="HD Digital Signs Logo" /></div>
   <nav>
     <a href="#home">Home</a>
     <a href="#services">Services</a>
@@ -171,7 +104,7 @@
   </nav>
 </header>
 
-<!-- HOME SECTION -->
+<!-- HOME -->
 <section id="home" style="background-image: url('LED.jpg');">
   <div class="content">
     <h1>HD Digital Signs Corporation</h1>
@@ -179,42 +112,142 @@
   </div>
 </section>
 
-<!-- SERVICES SECTION -->
-<section id="services" style="background-image: url('lamp-post-banners.jpg'); background-attachment: fixed;">
-<div class="content">
+<!-- SERVICES -->
+<section id="services" style="background-image: url('Lamp-post-banners.jpg'); background-attachment: fixed;">
+  <div class="content">
     <h1>Our Services</h1>
     <p>From LED boards to static billboards, lamp post banners, and custom outdoor solutions, we deliver impact through design and technology.</p>
   </div>
 </section>
 
-<!-- ABOUT SECTION -->
-  <section id="about" style="background-image: url('billboard-bg.jpg');">
+<!-- INVENTORIES -->
+<section id="inventories">
+  <div class="content">
+    <h1>Available OOH Sites</h1>
+    <p>Explore our premium out-of-home advertising locations designed for maximum visibility and impact.</p>
+    <div class="inventory-grid">
+      <!-- Add all your photos -->
+      <img src="NAIA T1-1.png" class="zoomable">
+      <img src="NAIA T1-2.png" class="zoomable">
+      <img src="NAIA T1-3.png" class="zoomable">
+      <img src="NAIA T1-4.png" class="zoomable">
+      <img src="NAIA T1-5.png" class="zoomable">
+      <img src="NAIA T1-6.png" class="zoomable">
+      <img src="NAIA T1-7.png" class="zoomable">
+      <img src="NAIA T1-8.png" class="zoomable">
+      <img src="NAIA T1-9.png" class="zoomable">
+      <img src="NAIA T1-10.png" class="zoomable">
+      <img src="NAIA T1-11.png" class="zoomable">
+      <img src="NAIA T1-12.png" class="zoomable">
+      <img src="NAIA T1-13.png" class="zoomable">
+      <img src="NAIA T1-14.png" class="zoomable">
+      <img src="NAIA T1-15.png" class="zoomable">
+      <img src="NAIA T1-16.png" class="zoomable">
+      <img src="NAIA T1-17.png" class="zoomable">
+      <img src="NAIA T1-18.png" class="zoomable">
+      <img src="NAIA T1-19.png" class="zoomable">
+      <img src="NAIA T1-20.png" class="zoomable">
+      <img src="NAIA T1-21.png" class="zoomable">
+      <img src="NAIA T1-22.png" class="zoomable">
+      <img src="NAIA T1-23.png" class="zoomable">
+      <img src="NAIA T1-24.png" class="zoomable">
+      <img src="NAIA T1-25.png" class="zoomable">
+      <img src="NAIA T1-26.png" class="zoomable">
+      <img src="NAIA T1-27.png" class="zoomable">
+      <img src="NAIA T1-28.png" class="zoomable">
+      <img src="NAIA T1-29.png" class="zoomable">
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div id="imageModal">
+  <span id="closeModal">&times;</span>
+  <span id="prevArrow" class="arrow">&#10094;</span>
+  <div class="modal-content">
+    <img id="modalImage" src="" alt="Zoomed Image">
+  </div>
+  <span id="nextArrow" class="arrow">&#10095;</span>
+</div>
+
+<script>
+  const modal = document.getElementById("imageModal");
+  const closeModal = document.getElementById("closeModal");
+  const modalImage = document.getElementById("modalImage");
+  const zoomables = document.querySelectorAll(".zoomable");
+  const prevArrow = document.getElementById("prevArrow");
+  const nextArrow = document.getElementById("nextArrow");
+
+  let currentIndex = 0;
+
+  function openModal(index) {
+    currentIndex = index;
+    modalImage.src = zoomables[index].src;
+    modal.classList.add("show");
+    modal.style.display = "flex";
+  }
+
+  zoomables.forEach((img, index) => {
+    img.addEventListener("click", () => openModal(index));
+  });
+
+  closeModal.addEventListener("click", () => {
+    modal.classList.remove("show");
+    setTimeout(() => modal.style.display = "none", 300);
+  });
+
+  nextArrow.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % zoomables.length;
+    modalImage.style.opacity = 0;
+    setTimeout(() => {
+      modalImage.src = zoomables[currentIndex].src;
+      modalImage.style.opacity = 1;
+    }, 200);
+  });
+
+  prevArrow.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + zoomables.length) % zoomables.length;
+    modalImage.style.opacity = 0;
+    setTimeout(() => {
+      modalImage.src = zoomables[currentIndex].src;
+      modalImage.style.opacity = 1;
+    }, 200);
+  });
+
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      setTimeout(() => modal.style.display = "none", 300);
+    }
+  });
+</script>
+
+<!-- ABOUT -->
+<section id="about" style="background-image: url('billboard-bg.jpg');">
   <div class="content">
     <h1>About Us</h1>
     <p>Backed by more than 30 years of combined OOH experience, we integrate collaboration, technology, and creativity to redefine outdoor media in the Philippines.</p>
   </div>
 </section>
 
-<!-- CLIENTS SECTION -->
+<!-- CLIENTS -->
 <section id="clients">
-  <div class="clients-content">
+  <div class="content">
     <h1>Our Satisfied Clients</h1>
     <div class="client-logos">
-      <img src="coke.png" alt="Coca-Cola Logo">
-      <img src="dmci.png" alt="DMCI Logo">
-      <img src="ayalaland.jpeg" alt="Ayala Land Logo">
-      <img src="jollibee.png" alt="Jollibee Logo">
+      <img src="coke.png">
+      <img src="dmci.png">
+      <img src="ayalaland.jpeg">
+      <img src="jollibee.png">
     </div>
   </div>
 </section>
 
-<!-- CONTACT SECTION -->
+<!-- CONTACT -->
 <section id="contact" style="background-color: #004aad;">
   <div class="content">
     <h1>Contact Us</h1>
-    <p>Email: <a href="mailto:hddigitalsignscorp@gmail.com">hddigitalsignscorp@gmail.com</a><br>
-    Tel: <a href="tel:+639178316041">+63 917 831 6041</a><br>
-    113 Scout Rallos St., Diliman, Quezon City</p>
+    <p>Email: hddigitalsignscorp@gmail.com<br>Tel: +639178316041<br>113 Scout Rallos St., Diliman, Quezon City</p>
   </div>
 </section>
 
@@ -224,3 +257,4 @@
 
 </body>
 </html>
+
