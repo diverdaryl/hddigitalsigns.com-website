@@ -630,7 +630,7 @@ function getBotReply(input) {
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
   (function(){
-    emailjs.init("GCHkHCxbBhz6puToe"); // Replace with your EmailJS Public Key
+    emailjs.init("GCHkHCxbBhz6puToe"); // Your Public Key
   })();
 
   const sendBtn = document.querySelector(".chatbot-input button");
@@ -650,8 +650,11 @@ function getBotReply(input) {
 
     // Send email via EmailJS
     emailjs.send("service_a7t0aak", "template_9vvifcd", {
-      user_name: "email",
-      user_message: "name"
+      name: "Website Visitor",       // matches {{name}}
+      email: "inquiry@hddigitalsigns.com", // matches {{email}} (use your own email or visitor’s email)
+      title: "Chatbot Inquiry",      // matches {{title}}
+      time: new Date().toLocaleString(), // matches {{time}}
+      message: message               // optional if you added {{message}} in your content
     })
     .then(() => {
       const botReply = document.createElement("div");
@@ -669,6 +672,3 @@ function getBotReply(input) {
   });
 </script>
 
-
-</body>
-</html>
