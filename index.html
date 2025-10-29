@@ -650,8 +650,8 @@ function getBotReply(input) {
 
     // Send email via EmailJS
     emailjs.send("service_a7t0aak", "template_9vvifcd", {
-      user_name: "HD Digital Signs Corporation",
-      user_message: Hello
+      user_name: "email",
+      user_message: "name"
     })
     .then(() => {
       const botReply = document.createElement("div");
