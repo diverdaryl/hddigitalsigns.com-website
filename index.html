@@ -627,5 +627,48 @@ function getBotReply(input) {
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("service_a7t0aak"); // Replace with your EmailJS Public Key
+  })();
+
+  const sendBtn = document.querySelector(".chatbot-input button");
+  const inputField = document.querySelector(".chatbot-input input");
+  const messagesContainer = document.querySelector(".chatbot-messages");
+
+  sendBtn.addEventListener("click", () => {
+    const message = inputField.value.trim();
+    if(message === "") return;
+
+    // Display user message
+    const userMsg = document.createElement("div");
+    userMsg.classList.add("chat-message");
+    userMsg.textContent = "You: " + message;
+    messagesContainer.appendChild(userMsg);
+    inputField.value = "";
+
+    // Send email via EmailJS
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+      user_name: "Website Visitor",
+      user_message: message
+    })
+    .then(() => {
+      const botReply = document.createElement("div");
+      botReply.classList.add("chat-message", "bot");
+      botReply.textContent = "Thank you! Your message has been sent.";
+      messagesContainer.appendChild(botReply);
+    })
+    .catch((error) => {
+      const botReply = document.createElement("div");
+      botReply.classList.add("chat-message", "bot");
+      botReply.textContent = "Oops, something went wrong. Please try again.";
+      messagesContainer.appendChild(botReply);
+      console.error("EmailJS Error:", error);
+    });
+  });
+</script>
+
+
 </body>
 </html>
