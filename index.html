@@ -629,46 +629,74 @@ function getBotReply(input) {
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-  (function(){
-    emailjs.init("GCHkHCxbBhz6puToe"); // Your Public Key
+  (function() {
+    emailjs.init("GCHkHCxbBhz6puToe"); // ✅ Your EmailJS Public Key
   })();
 
   const sendBtn = document.querySelector(".chatbot-input button");
   const inputField = document.querySelector(".chatbot-input input");
   const messagesContainer = document.querySelector(".chatbot-messages");
 
+  let visitorName = "";
+  let visitorEmail = "";
+  let step = 0; // 0 = ask name, 1 = ask email, 2 = chat
+
+  // Initial greeting
+  const greeting = document.createElement("div");
+  greeting.classList.add("chat-message", "bot");
+  greeting.textContent = "Hi! May I know your name?";
+  messagesContainer.appendChild(greeting);
+
   sendBtn.addEventListener("click", () => {
     const message = inputField.value.trim();
-    if(message === "") return;
+    if (message === "") return;
 
-    // Display user message
     const userMsg = document.createElement("div");
     userMsg.classList.add("chat-message");
     userMsg.textContent = "You: " + message;
     messagesContainer.appendChild(userMsg);
     inputField.value = "";
 
-    // Send email via EmailJS
-    emailjs.send("service_a7t0aak", "template_9vvifcd", {
-      name: "Website Visitor",       // matches {{name}}
-      email: "inquiry@hddigitalsigns.com", // matches {{email}} (use your own email or visitor’s email)
-      title: "Chatbot Inquiry",      // matches {{title}}
-      time: new Date().toLocaleString(), // matches {{time}}
-      message: message               // optional if you added {{message}} in your content
-    })
-    .then(() => {
+    if (step === 0) {
+      visitorName = message;
       const botReply = document.createElement("div");
       botReply.classList.add("chat-message", "bot");
-      botReply.textContent = "Thank you! Your message has been sent.";
+      botReply.textContent = `Nice to meet you, ${visitorName}! Can I have your email address?`;
       messagesContainer.appendChild(botReply);
-    })
-    .catch((error) => {
+      step = 1;
+    } 
+    else if (step === 1) {
+      visitorEmail = message;
       const botReply = document.createElement("div");
       botReply.classList.add("chat-message", "bot");
-      botReply.textContent = "Oops, something went wrong. Please try again.";
+      botReply.textContent = "Thank you! You can now type your inquiry.";
       messagesContainer.appendChild(botReply);
-      console.error("EmailJS Error:", error);
-    });
+      step = 2;
+    } 
+    else {
+      // Normal chat and send email
+      emailjs.send("service_a7t0aak", "template_9vvifcd", {
+        name: visitorName,
+        email: visitorEmail,
+        title: "Chatbot Inquiry",
+        time: new Date().toLocaleString(),
+        message: message
+      })
+      .then(() => {
+        const botReply = document.createElement("div");
+        botReply.classList.add("chat-message", "bot");
+        botReply.textContent = "Got it! Your message has been sent. We'll get back to you soon.";
+        messagesContainer.appendChild(botReply);
+      })
+      .catch((error) => {
+        const botReply = document.createElement("div");
+        botReply.classList.add("chat-message", "bot");
+        botReply.textContent = "Oops, something went wrong. Please try again.";
+        messagesContainer.appendChild(botReply);
+        console.error("EmailJS Error:", error);
+      });
+    }
   });
 </script>
+
 
